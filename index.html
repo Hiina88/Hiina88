@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Claude Code コマンドリスト</title>
+<style>
+  :root {
+    --bg: #f5f7fb;
+    --card: #ffffff;
+    --text: #1f2937;
+    --muted: #6b7280;
+    --border: #e5e7eb;
+    --accent: #6366f1;
+    --accent-2: #8b5cf6;
+    --run: #10b981;
+    --run-hover: #059669;
+    --pill-bg: #ffffff;
+    --pill-border: #e5e7eb;
+    --pill-active: linear-gradient(135deg, #f59e0b, #ef4444);
+    --code-bg: #f3f4f6;
+    --shadow: 0 4px 12px rgba(0,0,0,0.06);
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Noto Sans JP", "Yu Gothic", sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .app {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 16px 16px 80px;
+  }
+
+  .header {
+    text-align: center;
+    padding: 18px 0 8px;
+  }
+  .header .eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    font-weight: 600;
+  }
+  .header h1 {
+    margin: 8px 0 4px;
+    font-size: 26px;
+    font-weight: 800;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6, #ec4899);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    line-height: 1.2;
+  }
+  .header h1 .bolt { font-size: 22px; -webkit-text-fill-color: #f59e0b; }
+  .header .sub {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  .search {
+    margin: 14px 0 12px;
+    position: relative;
+  }
+  .search input {
+    width: 100%;
+    padding: 12px 14px 12px 38px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: #fff;
+    font-size: 14px;
+    outline: none;
+    box-shadow: var(--shadow);
+  }
+  .search input:focus { border-color: var(--accent); }
+  .search::before {
+    content: "🔎";
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 14px;
+    opacity: 0.6;
+  }
+
+  .pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 7px 14px;
+    border-radius: 999px;
+    background: var(--pill-bg);
+    border: 1px solid var(--pill-border);
+    font-size: 13px;
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.05s ease, box-shadow 0.15s ease;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  }
+  .pill:hover { transform: translateY(-1px); }
+  .pill.active {
+    background: var(--pill-active);
+    color: #fff;
+    border-color: transparent;
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.35);
+  }
+
+  .step-banner {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 18px 0 12px;
+  }
+  .step-banner .icon {
+    width: 40px; height: 40px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #fef3c7, #fde68a);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .step-banner h2 {
+    margin: 0;
+    font-size: 15px;
+    color: #ef4444;
+    font-weight: 700;
+  }
+  .step-banner p {
+    margin: 2px 0 0;
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .card {
+    background: var(--card);
+    border-radius: 14px;
+    padding: 14px 14px 14px 18px;
+    margin-bottom: 12px;
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    box-shadow: var(--shadow);
+    position: relative;
+    transition: transform 0.08s ease, box-shadow 0.15s ease;
+  }
+  .card:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(0,0,0,0.08); }
+  .card.cat-init { border-left-color: #06b6d4; }
+  .card.cat-basic { border-left-color: #ef4444; }
+  .card.cat-chat { border-left-color: #8b5cf6; }
+  .card.cat-ops { border-left-color: #f59e0b; }
+  .card.cat-git { border-left-color: #10b981; }
+  .card.cat-adv { border-left-color: #ec4899; }
+  .card.cat-launch { border-left-color: #facc15; }
+  .card.cat-phase { border-left-color: #f97316; }
+  .card.cat-quality { border-left-color: #ef4444; }
+  .card.cat-agent { border-left-color: #6366f1; }
+  .card.cat-share { border-left-color: #14b8a6; }
+  .card.cat-issue { border-left-color: #dc2626; }
+
+  .card .top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .card code.cmd {
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 13.5px;
+    background: var(--code-bg);
+    padding: 6px 10px;
+    border-radius: 8px;
+    color: #4338ca;
+    flex: 1;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  .run-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 7px 14px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #34d399, #10b981);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+    transition: transform 0.05s ease;
+    flex-shrink: 0;
+  }
+  .run-btn:hover { background: linear-gradient(135deg, #10b981, #059669); }
+  .run-btn:active { transform: scale(0.96); }
+  .run-btn.copied { background: linear-gradient(135deg, #6366f1, #8b5cf6); }
+
+  .card .title {
+    margin: 10px 0 4px;
+    font-size: 14px;
+    font-weight: 700;
+  }
+  .card .desc {
+    margin: 0;
+    font-size: 12.5px;
+    color: var(--muted);
+    border-left: 2px solid var(--border);
+    padding-left: 8px;
+  }
+
+  .empty {
+    text-align: center;
+    color: var(--muted);
+    padding: 40px 0;
+    font-size: 13px;
+  }
+
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: #111827;
+    color: #fff;
+    padding: 10px 18px;
+    border-radius: 999px;
+    font-size: 13px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    z-index: 10;
+  }
+  .toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  .footer {
+    text-align: center;
+    color: var(--muted);
+    font-size: 11px;
+    margin-top: 24px;
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <div class="eyebrow">CLAUDE CODE COMMANDS: コマンドリスト</div>
+    <h1><span class="bolt">⚡</span> Claude Code<br />コマンドリスト</h1>
+    <div class="sub">タップでクリップボードにコピー!</div>
+  </div>
+
+  <div class="search">
+    <input id="searchInput" type="text" placeholder="コマンドを検索..." />
+  </div>
+
+  <div class="pills" id="pills"></div>
+
+  <div id="cardList"></div>
+
+  <div class="footer">made with ⚡ for Claude Code users</div>
+</div>
+
+<div class="toast" id="toast">コピーしました!</div>
+
+<script>
+  const categories = [
+    { key: "all",     label: "🌐 ALL" },
+    { key: "init",    label: "🔧 初期" },
+    { key: "basic",   label: "🚀 基本" },
+    { key: "chat",    label: "💬 会話" },
+    { key: "ops",     label: "🛠 操作" },
+    { key: "git",     label: "🌿 Git" },
+    { key: "adv",     label: "✨ 応用" },
+    { key: "launch",  label: "⚡ 起動" },
+    { key: "phase",   label: "🎯 Phase" },
+    { key: "quality", label: "🛡 品質" },
+    { key: "agent",   label: "🤖 Agent" },
+    { key: "share",   label: "📦 共有" },
+    { key: "issue",   label: "📝 Issue" },
+  ];
+
+  const sections = [
+    {
+      id: "step1",
+      icon: "🚀",
+      title: "Step 1: 基本操作",
+      desc: "まずはここから! 起動と終了を覚えよう",
+      categories: ["basic"],
+      commands: [
+        { cmd: "claude", title: "Claude Codeを起動する", desc: "ターミナルで claude と入力するだけ", cat: "basic" },
+        { cmd: "claude \"質問内容\"", title: "質問を直接渡して起動する", desc: "claude \"このコードを説明して\"", cat: "basic" },
+        { cmd: "/help", title: "ヘルプを表示する", desc: "使い方がわからないときに", cat: "basic" },
+        { cmd: "/quit", title: "Claude Codeを終了する", desc: "/exit でも終了できる", cat: "basic" },
+      ],
+    },
+    {
+      id: "step2",
+      icon: "🔧",
+      title: "Step 2: 初期セットアップ",
+      desc: "最初に1回だけやる設定",
+      categories: ["init"],
+      commands: [
+        { cmd: "npm install -g @anthropic-ai/claude-code", title: "Claude Codeをインストール", desc: "Node.js環境にグローバルインストール", cat: "init" },
+        { cmd: "/login", title: "アカウントにログイン", desc: "Anthropicアカウントで認証", cat: "init" },
+        { cmd: "/logout", title: "ログアウトする", desc: "アカウントから切断", cat: "init" },
+        { cmd: "/init", title: "CLAUDE.mdを生成", desc: "プロジェクトの説明書を自動作成", cat: "init" },
+        { cmd: "/config", title: "設定画面を開く", desc: "テーマやモデルを変更", cat: "init" },
+      ],
+    },
+    {
+      id: "step3",
+      icon: "💬",
+      title: "Step 3: 会話の管理",
+      desc: "セッションをコントロール",
+      categories: ["chat"],
+      commands: [
+        { cmd: "/clear", title: "会話履歴をクリア", desc: "コンテキストをリセットして新しく開始", cat: "chat" },
+        { cmd: "/compact", title: "会話を要約して圧縮", desc: "長い会話を短くまとめる", cat: "chat" },
+        { cmd: "/resume", title: "前回のセッションを再開", desc: "中断した会話の続きから", cat: "chat" },
+        { cmd: "claude -c", title: "前のセッションを継続起動", desc: "claude --continue の短縮形", cat: "chat" },
+        { cmd: "/cost", title: "トークン使用量を確認", desc: "今のセッションのコストを表示", cat: "chat" },
+      ],
+    },
+    {
+      id: "step4",
+      icon: "🛠",
+      title: "Step 4: 操作・編集",
+      desc: "ファイルやコードを扱う",
+      categories: ["ops"],
+      commands: [
+        { cmd: "@filename", title: "ファイルを参照に追加", desc: "@で始めるとファイル候補が出る", cat: "ops" },
+        { cmd: "!command", title: "Bashコマンドを実行", desc: "!で始めるとシェルコマンドとして実行", cat: "ops" },
+        { cmd: "#メモ", title: "メモリに記録", desc: "#で始めるとCLAUDE.mdに追加候補", cat: "ops" },
+        { cmd: "Esc Esc", title: "メッセージ履歴を巻き戻す", desc: "ダブルEscで前のメッセージへ", cat: "ops" },
+        { cmd: "Shift+Tab", title: "編集モード切替", desc: "auto-accept / plan モードを切替", cat: "ops" },
+      ],
+    },
+    {
+      id: "step5",
+      icon: "🌿",
+      title: "Step 5: Git操作",
+      desc: "コミットやPRを作る",
+      categories: ["git"],
+      commands: [
+        { cmd: "コミットして", title: "変更をコミット", desc: "Claudeが差分を見てメッセージ作成", cat: "git" },
+        { cmd: "PRを作って", title: "プルリクエストを作成", desc: "ghコマンド経由で自動作成", cat: "git" },
+        { cmd: "このPRをレビューして", title: "PRレビュー", desc: "/review スキルでレビュー", cat: "git" },
+        { cmd: "/security-review", title: "セキュリティレビュー", desc: "脆弱性をスキャン", cat: "git" },
+      ],
+    },
+    {
+      id: "step6",
+      icon: "⚡",
+      title: "Step 6: 起動オプション",
+      desc: "claudeコマンドの便利フラグ",
+      categories: ["launch"],
+      commands: [
+        { cmd: "claude --resume", title: "セッション一覧から再開", desc: "過去の会話を選んで続きから", cat: "launch" },
+        { cmd: "claude -p \"質問\"", title: "ワンショット実行", desc: "対話せずに1回答えて終了", cat: "launch" },
+        { cmd: "claude --model opus", title: "モデルを指定して起動", desc: "opus / sonnet / haiku を選択", cat: "launch" },
+        { cmd: "claude --dangerously-skip-permissions", title: "権限確認をスキップ", desc: "サンドボックス環境向け", cat: "launch" },
+      ],
+    },
+    {
+      id: "step7",
+      icon: "✨",
+      title: "Step 7: 応用機能",
+      desc: "MCP・スキル・サブエージェント",
+      categories: ["adv", "agent"],
+      commands: [
+        { cmd: "/agents", title: "サブエージェント管理", desc: "専門エージェントを作成・編集", cat: "agent" },
+        { cmd: "/mcp", title: "MCPサーバー管理", desc: "外部ツール接続を確認", cat: "adv" },
+        { cmd: "/skill", title: "スキルを起動", desc: "登録済みスキルを呼び出す", cat: "adv" },
+        { cmd: "/hooks", title: "フックを設定", desc: "イベント自動実行を構成", cat: "adv" },
+        { cmd: "/permissions", title: "権限設定を開く", desc: "許可ツール・拒否ツールを管理", cat: "adv" },
+      ],
+    },
+    {
+      id: "step8",
+      icon: "🎯",
+      title: "Step 8: Phase別ワークフロー",
+      desc: "プロジェクト進行に合わせて",
+      categories: ["phase", "quality"],
+      commands: [
+        { cmd: "計画を立てて", title: "Plan mode で計画作成", desc: "Shift+Tab で plan mode に", cat: "phase" },
+        { cmd: "/init", title: "プロジェクト解析", desc: "CLAUDE.md を作る", cat: "phase" },
+        { cmd: "テストを書いて", title: "テスト実装", desc: "TDD で進めるなら最初に", cat: "phase" },
+        { cmd: "リファクタして", title: "リファクタリング", desc: "テストが通る状態で実行", cat: "quality" },
+        { cmd: "/review", title: "コードレビュー", desc: "差分をレビュー", cat: "quality" },
+      ],
+    },
+    {
+      id: "step9",
+      icon: "📦",
+      title: "Step 9: 共有・Issue",
+      desc: "チームで使うときの便利機能",
+      categories: ["share", "issue"],
+      commands: [
+        { cmd: "/export", title: "会話をエクスポート", desc: "Markdownで書き出し", cat: "share" },
+        { cmd: "Issueを作って", title: "GitHub Issueを起票", desc: "ghコマンドで作成", cat: "issue" },
+        { cmd: "Issue #123を見て", title: "Issueを取得して読む", desc: "番号指定で内容を取得", cat: "issue" },
+        { cmd: "@CLAUDE.md", title: "プロジェクトルールを参照", desc: "ルールファイルを読み込む", cat: "share" },
+      ],
+    },
+  ];
+
+  let activeCat = "basic";
+  let query = "";
+
+  const pillsEl = document.getElementById("pills");
+  const listEl = document.getElementById("cardList");
+  const searchEl = document.getElementById("searchInput");
+  const toastEl = document.getElementById("toast");
+
+  function renderPills() {
+    pillsEl.innerHTML = "";
+    categories.forEach((c) => {
+      const el = document.createElement("button");
+      el.className = "pill" + (activeCat === c.key ? " active" : "");
+      el.textContent = c.label;
+      el.onclick = () => {
+        activeCat = c.key;
+        renderPills();
+        renderList();
+      };
+      pillsEl.appendChild(el);
+    });
+  }
+
+  function matches(cmd) {
+    if (activeCat !== "all" && cmd.cat !== activeCat) return false;
+    if (!query) return true;
+    const q = query.toLowerCase();
+    return (
+      cmd.cmd.toLowerCase().includes(q) ||
+      cmd.title.toLowerCase().includes(q) ||
+      cmd.desc.toLowerCase().includes(q)
+    );
+  }
+
+  function sectionVisible(sec) {
+    if (activeCat !== "all" && !sec.categories.includes(activeCat)) {
+      return sec.commands.some(matches);
+    }
+    return sec.commands.some(matches);
+  }
+
+  function renderList() {
+    listEl.innerHTML = "";
+    let any = false;
+    sections.forEach((sec) => {
+      const visibleCmds = sec.commands.filter(matches);
+      if (visibleCmds.length === 0) return;
+      any = true;
+
+      const banner = document.createElement("div");
+      banner.className = "step-banner";
+      banner.innerHTML = `
+        <div class="icon">${sec.icon}</div>
+        <div>
+          <h2>${sec.title}</h2>
+          <p>${sec.desc}</p>
+        </div>
+      `;
+      listEl.appendChild(banner);
+
+      visibleCmds.forEach((c) => {
+        const card = document.createElement("div");
+        card.className = "card cat-" + c.cat;
+        card.innerHTML = `
+          <div class="top">
+            <code class="cmd"></code>
+            <button class="run-btn">RUN ▶</button>
+          </div>
+          <div class="title"></div>
+          <p class="desc"></p>
+        `;
+        card.querySelector(".cmd").textContent = c.cmd;
+        card.querySelector(".title").textContent = c.title;
+        card.querySelector(".desc").textContent = c.desc;
+        const btn = card.querySelector(".run-btn");
+        btn.onclick = () => copy(c.cmd, btn);
+        listEl.appendChild(card);
+      });
+    });
+
+    if (!any) {
+      const empty = document.createElement("div");
+      empty.className = "empty";
+      empty.textContent = "該当するコマンドが見つかりませんでした";
+      listEl.appendChild(empty);
+    }
+  }
+
+  function copy(text, btn) {
+    const done = () => {
+      btn.classList.add("copied");
+      btn.textContent = "✓ COPIED";
+      showToast("コピーしました: " + text);
+      setTimeout(() => {
+        btn.classList.remove("copied");
+        btn.textContent = "RUN ▶";
+      }, 1400);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done).catch(fallback);
+    } else {
+      fallback();
+    }
+    function fallback() {
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand("copy"); } catch (e) {}
+      document.body.removeChild(ta);
+      done();
+    }
+  }
+
+  let toastTimer = null;
+  function showToast(msg) {
+    toastEl.textContent = msg;
+    toastEl.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toastEl.classList.remove("show"), 1600);
+  }
+
+  searchEl.addEventListener("input", (e) => {
+    query = e.target.value.trim();
+    renderList();
+  });
+
+  renderPills();
+  renderList();
+</script>
+</body>
+</html>
