@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { Category, NewPromptInput, Prompt } from "@/types/prompt";
-import { ensureSeeded, savePrompts } from "@/lib/storage";
+import { ensureSeeded, markSeedDeleted, savePrompts } from "@/lib/storage";
 import {
   collectTags,
   copyToClipboard,
@@ -124,6 +124,10 @@ export default function HomePage() {
       )
     )
       return;
+    // シード由来 (seed_xxx) の場合、次回起動時の差分マージで復活しないよう削除フラグを立てる
+    if (p.id.startsWith("seed_")) {
+      markSeedDeleted(p.id);
+    }
     setPrompts((prev) => prev.filter((x) => x.id !== p.id));
     setDetail((cur) => (cur && cur.id === p.id ? null : cur));
     setToast("削除しました");
