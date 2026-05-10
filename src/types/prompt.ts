@@ -1,6 +1,7 @@
 export const CATEGORIES = [
   "Codex Cloud",
   "Genspark",
+  "モデル別プロンプト",
   "Xポスト",
   "Instagram投稿",
   "リール台本",

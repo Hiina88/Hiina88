@@ -12,6 +12,7 @@ interface CategoryFilterProps {
 const CATEGORY_COLORS: Record<string, string> = {
   "Codex Cloud": "bg-violet-100 text-violet-700 border-violet-200",
   Genspark: "bg-sky-100 text-sky-700 border-sky-200",
+  モデル別プロンプト: "bg-blue-100 text-blue-700 border-blue-200",
   Xポスト: "bg-zinc-100 text-zinc-700 border-zinc-200",
   Instagram投稿: "bg-pink-100 text-pink-700 border-pink-200",
   リール台本: "bg-rose-100 text-rose-700 border-rose-200",
