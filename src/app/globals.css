@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+html,
+body {
+  background-color: #f8f9fb;
+  color: #13161c;
+}
+
+/* スクロールバー(WebKit)を控えめに */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: #dde1e8;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #c2c8d2;
+}
+
+/* テキストエリアの最低限の整え */
+textarea {
+  font-family: inherit;
+}
+
+/* 改行を保持する prompt 表示 */
+.prompt-body {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* line-clamp 補助 */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+}
