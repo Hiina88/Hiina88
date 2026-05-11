@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#101322" />
+    <meta
+      name="description"
+      content="Codex、Claude Code、GPT-5.5、ChatGPT Images 2.0、Claude Opus 4.7向けの実戦プロンプトをスマホで素早く探してコピーできるアプリ。"
+    />
+    <title>Prompt Genius Pocket</title>
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="hero">
+        <nav class="topbar" aria-label="アプリ情報">
+          <span class="brand-mark">✦</span>
+          <span class="brand-name">Prompt Genius Pocket</span>
+          <span class="update-pill">2026.05 調査版</span>
+        </nav>
+        <div class="hero-copy">
+          <p class="eyebrow">スマホで即コピーできるAIプロンプト金庫</p>
+          <h1>天才的に使うための<br />プロンプトを1タップで。</h1>
+          <p class="lead">
+            Codexスマホ版、Claude Code、GPT-5.5、ChatGPT Images 2.0、Claude Opus 4.7向けに、公式ガイドの型へ落とし込んだプロンプトを格納しました。
+          </p>
+        </div>
+        <section class="quick-actions" aria-label="検索と統計">
+          <label class="search-box">
+            <span>検索</span>
+            <input id="searchInput" type="search" placeholder="例: リファクタ / 画像 / 設計" autocomplete="off" />
+          </label>
+          <div class="stat-card">
+            <strong id="promptCount">0</strong>
+            <span>prompts</span>
+          </div>
+        </section>
+      </header>
+
+      <main>
+        <section class="category-strip" aria-label="カテゴリ選択">
+          <button class="chip is-active" data-filter="all">全部</button>
+          <button class="chip" data-filter="codex">Codex</button>
+          <button class="chip" data-filter="claude-code">Claude Code</button>
+          <button class="chip" data-filter="gpt55">GPT-5.5</button>
+          <button class="chip" data-filter="image20">Images 2.0</button>
+          <button class="chip" data-filter="opus47">Opus 4.7</button>
+        </section>
+
+        <section class="insight-card">
+          <div>
+            <p class="eyebrow">Research synthesis</p>
+            <h2>勝ち筋は「役割・制約・完了条件・検証」を最初に渡すこと。</h2>
+          </div>
+          <p>
+            公式資料では、CodexはGitHub Issueのような構造化指示、Claude Codeはリポジトリ文脈と反復、GPT系は明確な区切り・例・出力形式、画像生成は目的・主題・構図・スタイル・編集保持の明示が有効とされています。
+          </p>
+        </section>
+
+        <section id="promptGrid" class="prompt-grid" aria-live="polite"></section>
+      </main>
+    </div>
+
+    <template id="promptCardTemplate">
+      <article class="prompt-card">
+        <div class="card-head">
+          <span class="tool-badge"></span>
+          <button class="favorite-button" type="button" aria-label="お気に入りに追加">☆</button>
+        </div>
+        <h3></h3>
+        <p class="summary"></p>
+        <ul class="pattern-list"></ul>
+        <details>
+          <summary>プロンプトを見る</summary>
+          <pre><code></code></pre>
+        </details>
+        <div class="card-actions">
+          <button class="copy-button" type="button">コピー</button>
+          <a class="source-link" target="_blank" rel="noreferrer">出典</a>
+        </div>
+      </article>
+    </template>
+
+    <div id="toast" class="toast" role="status" aria-live="polite">コピーしました</div>
+    <script src="app.js" type="module"></script>
+  </body>
+</html>
