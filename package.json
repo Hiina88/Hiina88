@@ -1,0 +1,15 @@
+{
+  "name": "prompt-genius-pocket",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Mobile-first prompt library PWA for quickly browsing and copying AI prompts.",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "check": "node --check app.js && node --check server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
