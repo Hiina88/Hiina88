@@ -2,13 +2,13 @@
   "name": "AI Prompt Atelier",
   "short_name": "Prompt辞典",
   "description": "スマホで検索・コピー・保存できる自分専用AIプロンプト辞典アプリ",
-  "start_url": "/",
+  "start_url": ".",
   "display": "standalone",
   "background_color": "#fffaf3",
   "theme_color": "#f7efe2",
   "orientation": "portrait",
   "icons": [
-    { "src": "/icons/icon-192.svg", "sizes": "192x192", "type": "image/svg+xml", "purpose": "any maskable" },
-    { "src": "/icons/icon-512.svg", "sizes": "512x512", "type": "image/svg+xml", "purpose": "any maskable" }
+    { "src": "icons/icon-192.svg", "sizes": "192x192", "type": "image/svg+xml", "purpose": "any maskable" },
+    { "src": "icons/icon-512.svg", "sizes": "512x512", "type": "image/svg+xml", "purpose": "any maskable" }
   ]
 }

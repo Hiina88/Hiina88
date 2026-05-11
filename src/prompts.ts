@@ -1,4 +1,4 @@
-import { Category, PromptItem } from './types';
+import type { Category, PromptItem } from './types.js';
 
 export const categories: Category[] = [
   'Codex',

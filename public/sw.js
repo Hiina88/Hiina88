@@ -1,5 +1,5 @@
-const CACHE_NAME = 'ai-prompt-atelier-v1';
-const APP_SHELL = ['/', '/index.html', '/manifest.webmanifest', '/icons/icon-192.svg', '/icons/icon-512.svg'];
+const CACHE_NAME = 'ai-prompt-atelier-v2';
+const APP_SHELL = ['./', 'index.html', 'manifest.webmanifest', 'icons/icon-192.svg', 'icons/icon-512.svg'];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(APP_SHELL)));
@@ -20,6 +20,6 @@ self.addEventListener('fetch', (event) => {
       const clone = response.clone();
       caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
       return response;
-    }).catch(() => caches.match('/')))
+    }).catch(() => caches.match('./')))
   );
 });
